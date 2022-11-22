@@ -117,11 +117,11 @@ QTTR Rechner
             own = own + score2
 
             result_one = Element('match1')            
-            result_one.write(f"{Element('qttr1').value} hat gegen {Element('qttr2').value} {Element('first').value}. ({Element('score1').value})")
+            result_one.write(f"{Element('qttr1').value} hat gegen {Element('qttr2').value} {Element('first').value}. ({score1})")
 
             if(int(Element('qttr3').value) != 0):
                 result_two = Element('match2')
-                result_two.write(f"{Element('qttr1').value} hat gegen {Element('qttr3').value} {Element('second').value}. ({Element('score2').value})")
+                result_two.write(f"{Element('qttr1').value} hat gegen {Element('qttr3').value} {Element('second').value}. ({score2})")
             
             result = Element('result')
             result.write(f"Dein neuer QTTR Wert ist {own}.")
