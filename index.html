@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catch the Stars</title>
+    <title>Chess-Tac-Toe</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Catch the Stars</h1>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <p>Score: <span id="score">0</span></p>
+    <div class="game-container">
+        <h1>Chess-Tac-Toe</h1>
+        <div id="game-board" class="game-board"></div>
+        <div class="piece-selection">
+            <button class="piece-button" data-piece="R">♜</button>
+            <button class="piece-button" data-piece="N">♞</button>
+            <button class="piece-button" data-piece="B">♝</button>
+            <button class="piece-button" data-piece="Q">♛</button>
+            <button class="piece-button" data-piece="K">♚</button>
+        </div>
+        <div id="status" class="status"></div>
+        <button id="reset-button">Reset Game</button>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>
