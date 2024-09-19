@@ -1,133 +1,15 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-<title>
-
-QTTR Rechner   
-    
-</title>
-
-<link rel="icon" type="image/x-icon" href="./tticon.png">
-    
-<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Stars</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
-<style>
-    input[type=text], select {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    
-    input[type=submit] {
-      width: 100%;
-      background-color: #4c4faf;
-      color: white;
-      padding: 14px 20px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    input[type=submit]:hover {
-      background-color: #45a049;
-    }
-    
-    p {
-      border-radius: 5px;
-      background-color: #f2f2f2;
-      padding: 20px;
-    }
-    </style>
-
 <body>
-
-    <form onsubmit="return false">
-        <label for="qttr1">Dein QTTR Wert:</label><br>
-        <input type="text" id="qttr1" name="qttr1" value=""><br>
-
-        <select name="age" id="age">
-            <option value="above">Über 21</option>
-            <option value="below">Unter 21</option>
-        </select>
-
-
-        <label for="qttr2">QTTR Wert deines 1. Gegners:</label><br>
-        <input type="text" id="qttr2" name="qttr2" value=""><br>
-
-
-        <select name="first" id="first">
-            <option value="gewonnen">Gewonnen</option>
-            <option value="verloren">Verloren</option>
-        </select>
-
-
-        <label for="qttr3">QTTR Wert deines 2. Gegners:</label><br>
-        <input type="text" id="qttr3" name="qttr3" value=""><br>
-        
-        <select name="second" id="second">
-            <option value="gewonnen">Gewonnen</option>
-            <option value="verloren">Verloren</option>
-
-        <input pys-onClick="sub" type="submit" id="btn-form" value="Berechnen">
-
-
-    </form> 
- 
-    <p id = 'match1'></p>
-    <p id = 'match2'></p>
-    <p id = 'result'></p>
-    <py-script>
-        rate = 0
-        score1 = 0
-        score2 = 0
-        own = 0
-        def sub(*args,**kwargs):
-
-            if(Element('age').value == "below"):
-                rate = 20
-            else:
-                rate = 16
-            
-            p1 = round(1/(1+(10**((int(Element('qttr2').value) - int(Element('qttr1').value))/150))), 3)
-            p2 = round(1/(1+(10**((int(Element('qttr3').value) - int(Element('qttr1').value))/150))), 3)
-            if(Element('first').value == "gewonnen"):
-                score1 = round((1 - p1) * rate)
-            else:
-                score1 = round((0 - p1) * rate)
-            
-            own = int(Element('qttr1').value) + score1
-
-            if(int(Element('qttr3').value) != 0):
-                if(Element('second').value == "gewonnen"):
-                    score2 = round((1 - p2) * rate)
-                else:
-                    score2 = round((0 - p2) * rate)
-            else:
-                score2 = 0
-            
-            own = own + score2
-
-            result_one = Element('match1')            
-            result_one.write(f"{Element('qttr1').value} hat gegen {Element('qttr2').value} {Element('first').value}. ({score1})")
-
-            if(int(Element('qttr3').value) != 0):
-                result_two = Element('match2')
-                result_two.write(f"{Element('qttr1').value} hat gegen {Element('qttr3').value} {Element('second').value}. ({score2})")
-            
-            result = Element('result')
-            result.write(f"Dein neuer QTTR Wert ist {own}. ({score1 + score2})")
-        
-    
-    </py-script>
-
+    <h1>Catch the Stars</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <p>Score: <span id="score">0</span></p>
+    <script src="game.js"></script>
 </body>
 </html>
