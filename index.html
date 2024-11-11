@@ -1,25 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess-Tac-Toe</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Tischtennis Punkteberechnung</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #444;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        label {
+            flex: 1;
+            margin-right: 10px;
+        }
+        input[type="number"] {
+            flex: 2;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="checkbox"] {
+            margin-left: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>Chess-Tac-Toe</h1>
-        <div id="game-board" class="game-board"></div>
-        <div class="piece-selection">
-            <button class="piece-button" data-piece="R">♜</button>
-            <button class="piece-button" data-piece="N">♞</button>
-            <button class="piece-button" data-piece="B">♝</button>
-            <button class="piece-button" data-piece="Q">♛</button>
-            <button class="piece-button" data-piece="K">♚</button>
+    <h1>Tischtennis Punkteberechnung</h1>
+    <div class="form-container">
+        <div class="form-group">
+            <label for="player">Deine Punkte:</label>
+            <input type="number" id="player" name="player1" required>
         </div>
-        <div id="status" class="status"></div>
-        <button id="reset-button">Reset Game</button>
+        <div class="form-group">
+            <label for="opponent1">Gegner 1:</label>
+            <input type="number" id="opponent1" name="opponent1" required>
+            <input type="checkbox" id="checkbox1" name="checkbox1">
+        </div>
+        <div class="form-group">
+            <label for="opponent2">Gegner 2:</label>
+            <input type="number" id="opponent2" name="opponent2" required>
+            <input type="checkbox" id="checkbox2" name="checkbox2">
+        </div>
+        <button type="button" onclick="calculatePoints()">Berechnen</button>
     </div>
-    <script src="game.js"></script>
+    <h2 id="result">Ergebnis:</h2>
+
+    <script>
+        function calculatePoints() {
+            const playerPoints = parseInt(document.getElementById('player').value);
+            const opponent1Points = parseInt(document.getElementById('opponent1').value);
+            const opponent2Points = parseInt(document.getElementById('opponent2').value);
+
+            const res1 = document.getElementById('checkbox1').checked ? 1 : 0;
+            const res2 = document.getElementById('checkbox2').checked ? 1 : 0;
+
+            function calculatePRes(player, opponent) {
+                const exponent = (opponent - player) / 150;
+                return 1 / (1 + Math.pow(10, exponent));
+            }
+
+            const P_res1 = calculatePRes(playerPoints, opponent1Points);
+            const P_res2 = calculatePRes(playerPoints, opponent2Points);
+
+            const change = 16;
+
+            function calculateTTRNew(playerPoints, res, P_res) {
+                const difference = res - P_res;
+                const adjustment = Math.round(difference * change);
+                return playerPoints + adjustment;
+            }
+
+            const TTR_new1 = calculateTTRNew(playerPoints, res1, P_res1);
+            const TTR_new2 = calculateTTRNew(playerPoints, res2, P_res2);
+
+            const diff1 = TTR_new1 - playerPoints;
+            const diff2 = TTR_new2 - playerPoints;
+
+            const diff_ges = (isNaN(diff1) ? 0 : diff1) + (isNaN(diff2) ? 0 : diff2);
+            const TTR_new = playerPoints + diff_ges;
+
+            document.getElementById('result').innerHTML = `TTR new: ${TTR_new} (${diff_ges})`;
+        }
+    </script>
 </body>
 </html>
