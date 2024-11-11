@@ -45,7 +45,14 @@
         input[type="checkbox"] {
             margin-left: 10px;
         }
-        button {
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px; /* Add space between buttons */
+        }
+        .calculate-button {
+            flex: 4;
             padding: 10px 15px;
             background-color: #007bff;
             color: #fff;
@@ -54,8 +61,21 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        button:hover {
+        .calculate-button:hover {
             background-color: #0056b3;
+        }
+        .reset-button {
+            flex: 1;
+            padding: 10px 5px;
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .reset-button:hover {
+            background-color: #5a6268;
         }
         #result {
             text-align: center;
@@ -82,7 +102,10 @@
             <input type="number" id="opponent2" name="opponent2" required>
             <input type="checkbox" id="checkbox2" name="checkbox2">
         </div>
-        <button type="button" onclick="calculatePoints()">Berechnen</button>
+        <div class="button-group">
+            <button type="button" class="calculate-button" onclick="calculatePoints()">Berechnen</button>
+            <button type="button" class="reset-button" onclick="resetValues()">Zurücksetzen</button>
+        </div>
     </div>
     <h2 id="result">Ergebnis:</h2>
 
@@ -121,6 +144,15 @@
             const TTR_new = playerPoints + diff_ges;
 
             document.getElementById('result').innerHTML = `TTR new: ${TTR_new} (${diff_ges})`;
+        }
+
+        function resetValues() {
+            document.getElementById('player').value = '';
+            document.getElementById('opponent1').value = '';
+            document.getElementById('opponent2').value = '';
+            document.getElementById('checkbox1').checked = false;
+            document.getElementById('checkbox2').checked = false;
+            document.getElementById('result').innerHTML = 'Ergebnis:';
         }
     </script>
 </body>
