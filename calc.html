@@ -1,47 +1,42 @@
 <!DOCTYPE html>
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding-top: 10px;
         }
-        button:hover {
-            background-color: #0056b3;
+        .history-item {
+            font-size: 14px;
+            color: #555;
         }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <input type="text" id="display" disabled>
-        <div>
-            <button onclick="appendNumber('1')">1</button>
-            <button onclick="appendNumber('2')">2</button>
-            <button onclick="appendNumber('3')">3</button>
-            <button onclick="setOperation('+')">+</button>
+        <input type="text" class="display" id="display" disabled>
+        <div class="buttons">
+            <button class="button" onclick="appendNumber('7')">7</button>
+            <button class="button" onclick="appendNumber('8')">8</button>
+            <button class="button" onclick="appendNumber('9')">9</button>
+            <button class="button operator" onclick="setOperation('/')">/</button>
+            <button class="button" onclick="appendNumber('4')">4</button>
+            <button class="button" onclick="appendNumber('5')">5</button>
+            <button class="button" onclick="appendNumber('6')">6</button>
+            <button class="button operator" onclick="setOperation('*')">*</button>
+            <button class="button" onclick="appendNumber('1')">1</button>
+            <button class="button" onclick="appendNumber('2')">2</button>
+            <button class="button" onclick="appendNumber('3')">3</button>
+            <button class="button operator" onclick="setOperation('-')">-</button>
+            <button class="button" onclick="appendNumber('0')">0</button>
+            <button class="button" onclick="appendNumber('.')">.</button>
+            <button class="button equals" onclick="calculate()">=</button>
+            <button class="button operator" onclick="setOperation('+')">+</button>
+            <button class="button delete" onclick="deleteLast()">DEL</button>
         </div>
-        <div>
-            <button onclick="appendNumber('4')">4</button>
-            <button onclick="appendNumber('5')">5</button>
-            <button onclick="appendNumber('6')">6</button>
-            <button onclick="setOperation('-')">-</button>
-        </div>
-        <div>
-            <button onclick="appendNumber('7')">7</button>
-            <button onclick="appendNumber('8')">8</button>
-            <button onclick="appendNumber('9')">9</button>
-            <button onclick="setOperation('*')">*</button>
-        </div>
-        <div>
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="appendNumber('0')">0</button>
-            <button onclick="calculateResult()">=</button>
-            <button onclick="setOperation('/')">/</button>
-        </div>
+        <div class="history" id="history"></div>
     </div>
+
     <script>
         let currentInput = '';
         let currentOperation = null;
-        let previousInput = '';
+        let firstOperand = null;
+        let history = [];
 
         function appendNumber(number) {
             currentInput += number;
@@ -50,52 +45,59 @@
 
         function setOperation(operation) {
             if (currentInput === '') return;
-            if (previousInput !== '') {
-                calculateResult();
+            if (firstOperand === null) {
+                firstOperand = parseFloat(currentInput);
+            } else if (currentOperation) {
+                calculate();
             }
             currentOperation = operation;
-            previousInput = currentInput;
             currentInput = '';
         }
 
-        function calculateResult() {
+        function calculate() {
             if (currentOperation === null || currentInput === '') return;
-            const prev = parseFloat(previousInput);
-            const current = parseFloat(currentInput);
+            const secondOperand = parseFloat(currentInput);
             let result;
             switch (currentOperation) {
                 case '+':
-                    result = prev + current;
+                    result = firstOperand + secondOperand;
                     break;
                 case '-':
-                    result = prev - current;
+                    result = firstOperand - secondOperand;
                     break;
                 case '*':
-                    result = prev * current;
+                    result = firstOperand * secondOperand;
                     break;
                 case '/':
-                    result = prev / current;
+                    result = firstOperand / secondOperand;
                     break;
                 default:
                     return;
             }
+            addToHistory(`${firstOperand} ${currentOperation} ${secondOperand} = ${result}`);
             currentInput = result.toString();
             currentOperation = null;
-            previousInput = '';
-            updateDisplay();
-        }
-
-        function clearDisplay() {
-            currentInput = '';
-            currentOperation = null;
-            previousInput = '';
+            firstOperand = null;
             updateDisplay();
         }
 
         function updateDisplay() {
             document.getElementById('display').value = currentInput;
         }
+
+        function deleteLast() {
+            currentInput = currentInput.slice(0, -1);
+            updateDisplay();
+        }
+
+        function addToHistory(entry) {
+            history.push(entry);
+            const historyElement = document.getElementById('history');
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.textContent = entry;
+            historyElement.appendChild(historyItem);
+        }
     </script>
 </body>
 </html>
-
