@@ -3,165 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Calculator</title>
+    <title>Maze Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             background-color: #f0f0f0;
         }
-        .calculator {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .display {
-            width: 100%;
-            height: 40px;
-            margin-bottom: 10px;
-            text-align: right;
-            padding: 10px;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .buttons {
+        #maze {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(5, 50px);
+            grid-template-rows: repeat(5, 50px);
+            gap: 5px;
         }
-        .button {
-            padding: 20px;
-            font-size: 18px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
         }
-        .button:hover {
-            background-color: #e0e0e0;
+        .wall {
+            background-color: #333;
         }
-        .button.operator {
-            background-color: #f0f0f0;
-        }
-        .button.equals {
+        .player {
             background-color: #4caf50;
-            color: white;
         }
-        .button.delete {
-            background-color: #f44336;
-            color: white;
-        }
-        .history {
-            margin-top: 20px;
-            max-height: 100px;
-            overflow-y: auto;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-        }
-        .history-item {
-            font-size: 14px;
-            color: #555;
+        .goal {
+            background-color: #ffeb3b;
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" class="display" id="display" disabled>
-        <div class="buttons">
-            <button class="button" onclick="appendNumber('7')">7</button>
-            <button class="button" onclick="appendNumber('8')">8</button>
-            <button class="button" onclick="appendNumber('9')">9</button>
-            <button class="button operator" onclick="setOperation('/')">/</button>
-            <button class="button" onclick="appendNumber('4')">4</button>
-            <button class="button" onclick="appendNumber('5')">5</button>
-            <button class="button" onclick="appendNumber('6')">6</button>
-            <button class="button operator" onclick="setOperation('*')">*</button>
-            <button class="button" onclick="appendNumber('1')">1</button>
-            <button class="button" onclick="appendNumber('2')">2</button>
-            <button class="button" onclick="appendNumber('3')">3</button>
-            <button class="button operator" onclick="setOperation('-')">-</button>
-            <button class="button" onclick="appendNumber('0')">0</button>
-            <button class="button" onclick="appendNumber('.')">.</button>
-            <button class="button equals" onclick="calculate()">=</button>
-            <button class="button operator" onclick="setOperation('+')">+</button>
-            <button class="button delete" onclick="deleteLast()">DEL</button>
-        </div>
-        <div class="history" id="history"></div>
+    <div id="maze">
+        <div class="cell player" id="player">😊</div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell wall"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell goal" id="goal">❤️</div>
     </div>
-
     <script>
-        let currentInput = '';
-        let currentOperation = null;
-        let firstOperand = null;
-        let history = [];
+        const player = document.getElementById('player');
+        const goal = document.getElementById('goal');
+        const cells = document.querySelectorAll('.cell');
+        let playerPosition = 0;
 
-        function appendNumber(number) {
-            currentInput += number;
-            updateDisplay();
-        }
+        document.addEventListener('keydown', (e) => {
+            let newPosition = playerPosition;
+            if (e.key === 'ArrowUp' && playerPosition >= 5) newPosition -= 5;
+            if (e.key === 'ArrowDown' && playerPosition < 20) newPosition += 5;
+            if (e.key === 'ArrowLeft' && playerPosition % 5 !== 0) newPosition -= 1;
+            if (e.key === 'ArrowRight' && playerPosition % 5 !== 4) newPosition += 1;
 
-        function setOperation(operation) {
-            if (currentInput === '') return;
-            if (firstOperand === null) {
-                firstOperand = parseFloat(currentInput);
-            } else if (currentOperation) {
-                calculate();
+            if (!cells[newPosition].classList.contains('wall')) {
+                cells[playerPosition].classList.remove('player');
+                playerPosition = newPosition;
+                cells[playerPosition].classList.add('player');
             }
-            currentOperation = operation;
-            currentInput = '';
-        }
 
-        function calculate() {
-            if (currentOperation === null || currentInput === '') return;
-            const secondOperand = parseFloat(currentInput);
-            let result;
-            switch (currentOperation) {
-                case '+':
-                    result = firstOperand + secondOperand;
-                    break;
-                case '-':
-                    result = firstOperand - secondOperand;
-                    break;
-                case '*':
-                    result = firstOperand * secondOperand;
-                    break;
-                case '/':
-                    result = firstOperand / secondOperand;
-                    break;
-                default:
-                    return;
+            if (cells[playerPosition] === goal) {
+                alert('I love you <3');
             }
-            addToHistory(`${firstOperand} ${currentOperation} ${secondOperand} = ${result}`);
-            currentInput = result.toString();
-            currentOperation = null;
-            firstOperand = null;
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            document.getElementById('display').value = currentInput;
-        }
-
-        function deleteLast() {
-            currentInput = currentInput.slice(0, -1);
-            updateDisplay();
-        }
-
-        function addToHistory(entry) {
-            history.push(entry);
-            const historyElement = document.getElementById('history');
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            historyItem.textContent = entry;
-            historyElement.appendChild(historyItem);
-        }
+        });
     </script>
 </body>
 </html>
