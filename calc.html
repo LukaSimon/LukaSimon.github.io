@@ -3,89 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maze Game</title>
+    <title>Maze</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
         }
-        #maze {
-            display: grid;
-            grid-template-columns: repeat(5, 50px);
-            grid-template-rows: repeat(5, 50px);
-            gap: 5px;
+
+        .hidden {
+            display: none !important; 
         }
-        .cell {
-            width: 50px;
-            height: 50px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+
+        h1 {
+            color: green;
+            font-size: 64px;
+        }
+
+        .winner {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            position: absolute;
+            flex-direction: column;
+            z-index: 1;
+            height: 100vh;
+            width: 100vw;
         }
-        .wall {
-            background-color: #333;
+
+        /* CSS for the button */
+        .reset {
+            padding: 10px 20px;
+            background-color: #ffffff; /* Set background color */
+            border: 1px solid #cccccc; /* Set border color */
+            color: #333333; /* Set text color */
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px; /* Optional: Add border-radius for rounded corners */
         }
-        .player {
-            background-color: #4caf50;
+
+        /* Hover effect */
+        .reset:hover {
+            background-color: #f0f0f0; /* Change background color on hover */
         }
-        .goal {
-            background-color: #ffeb3b;
+
+        /* Active effect */
+        .reset:active {
+            background-color: #e0e0e0; /* Change background color on click */
         }
+
     </style>
 </head>
 <body>
-    <div id="maze">
-        <div class="cell player" id="player">😊</div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell wall"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell goal" id="goal">❤️</div>
+    <div class="winner hidden">
+        <h1>YOU WIN!</h1>
+
+        <button class="reset">Play Again!</button>
     </div>
-    <script>
-        const player = document.getElementById('player');
-        const goal = document.getElementById('goal');
-        const cells = document.querySelectorAll('.cell');
-        let playerPosition = 0;
-
-        document.addEventListener('keydown', (e) => {
-            let newPosition = playerPosition;
-            if (e.key === 'ArrowUp' && playerPosition >= 5) newPosition -= 5;
-            if (e.key === 'ArrowDown' && playerPosition < 20) newPosition += 5;
-            if (e.key === 'ArrowLeft' && playerPosition % 5 !== 0) newPosition -= 1;
-            if (e.key === 'ArrowRight' && playerPosition % 5 !== 4) newPosition += 1;
-
-            if (!cells[newPosition].classList.contains('wall')) {
-                cells[playerPosition].classList.remove('player');
-                playerPosition = newPosition;
-                cells[playerPosition].classList.add('player');
-            }
-
-            if (cells[playerPosition] === goal) {
-                alert('I love you <3');
-            }
-        });
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
