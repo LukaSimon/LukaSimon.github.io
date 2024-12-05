@@ -256,35 +256,8 @@ createGoal();
 // Win condition
 win();
 
-// Reset button functionality
+// Reset button functionality to refresh the page
 const resetButton = document.querySelector('.reset');
 resetButton.addEventListener('click', () => {
-    document.querySelector('.winner').classList.add('hidden');
-    world.gravity.y = 0;
-
-    // Clear the world and recreate the maze
-    World.clear(world);
-    Engine.clear(engine);
-
-    createOuterWalls();
-    mazeAlgorithm(startRow, startColumn);
-    createGoal();
-
-    // Recreate the ball
-    ball = Bodies.circle(
-        unitLengthX / 2,
-        unitLengthY / 2,
-        ballRadius,
-        { 
-            label: 'ball',
-            restitution: 0.5,
-            friction: 0.01,
-            frictionAir: 0.02,
-            slop: 0.01,
-            render: {
-                fillStyle: 'white'
-            }
-        }
-    );
-    World.add(world, ball);
+    location.reload(); // Reloads the page, similar to pressing F5
 });
